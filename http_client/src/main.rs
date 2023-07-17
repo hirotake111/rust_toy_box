@@ -11,7 +11,7 @@ use http_client::fetch;
 
 #[allow(dead_code)]
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main_() -> Result<(), Box<dyn std::error::Error>> {
     let url = match env::args().nth(1) {
         Some(url) => url,
         None => {
@@ -63,7 +63,7 @@ async fn main___() -> Result<(), Box<dyn std::error::Error>> {
 
 #[allow(dead_code)]
 #[tokio::main]
-async fn main_() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let semaphore = Arc::new(Semaphore::new(2)); // Limit the number of concurrent requests to 3.
     let urls = vec![
         "https://www.google.com",
@@ -88,8 +88,10 @@ async fn main_() -> Result<(), Box<dyn std::error::Error>> {
         }));
     }
 
+    println!("Queued all handles");
     for handle in join_handles {
         handle.await?;
+        println!("await done");
     }
     Ok(())
 }
