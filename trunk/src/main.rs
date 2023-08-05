@@ -25,11 +25,8 @@ impl<T> Trunk<T> {
             }
         }
 
-        let ptr = {
-            // Safety: memptr is dereferenceable as we created it from a
-            // reference and have exclusive access
-            ptr::NonNull::new(memptr).expect("Guaranteed non-null if posix_memalign returns 0")
-        };
+        let ptr =
+            { ptr::NonNull::new(memptr).expect("Guaranteed non-null if posix_memalign returns 0") };
 
         // Move value from the stack to the location we allocated on the heap
         unsafe {
@@ -51,9 +48,9 @@ impl<T> Deref for Trunk<T> {
         unsafe {
             // Safety: The pointer is aligned, initialized, and dereferenceable
             //   by the logic in [`Self::new`]. We require readers to borrow the
-            //   Carton, and the lifetime of the return value is elided to the
+            //   Trunk, and the lifetime of the return value is elided to the
             //   lifetime of the input. This means the borrow checker will
-            //   enforce that no one can mutate the contents of the Carton until
+            //   enforce that no one can mutate the contents of the Trunk until
             //   the reference returned is dropped.
             self.0.as_ref()
         }
@@ -65,10 +62,10 @@ impl<T> DerefMut for Trunk<T> {
         unsafe {
             // Safety: The pointer is aligned, initialized, and dereferenceable
             //   by the logic in [`Self::new`]. We require writers to mutably
-            //   borrow the Carton, and the lifetime of the return value is
+            //   borrow the Trunk, and the lifetime of the return value is
             //   elided to the lifetime of the input. This means the borrow
             //   checker will enforce that no one else can access the contents
-            //   of the Carton until the mutable reference returned is dropped.
+            //   of the Trunk until the mutable reference returned is dropped.
             self.0.as_mut()
         }
     }
